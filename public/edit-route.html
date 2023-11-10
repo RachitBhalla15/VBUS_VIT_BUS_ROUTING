@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Route</title>
+
+    <link rel="stylesheet" href="web-styles/index.css">
+
+    <link rel="stylesheet" href="web-styles/edit-route.css">
+  
+    <script type="module" src="scripts/edit-route.js"></script>
+    
+  </head>
+  <body>
+    
+    <img class="background" src="images/bg.png">
+
+    <div class="top-bar">
+      <img class="logo" src="images/vit-logo.png">
+      <div class="profile-tab">
+        <div class="profile-container">
+          <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img">
+          <a href="login.html">
+            <div class="sign-out">Signout</div>
+          </a>
+        </div>
+
+        <div class="profile">
+          <div class="id">ADMIN</div>
+          <div>VIT Admin</div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="features">
+        <a href="admin-index.html">
+          <button class="home-button">Home</button>
+        </a>
+
+        <div class="edit-dropdown">
+          <button class="edit-route-button">Edit Routes</button>
+          <div class="edit-dropdown-content">
+            <a href="add-route.html" >Add Route</a>
+            <a href="edit-route.html" >Enable-Disable</a>
+            <a href="update-route.html">Update Route</a>
+            <a href="delete-route.html">Delete Route</a>
+            <a href="add-stops.html">Add Stops</a>
+            
+          </div>
+        </div>
+
+        <div class="edit-dropdown">
+          <button class="edit-route-button">Resources</button>
+          <div class="edit-dropdown-content">
+            <div class="nested-dropdown">
+              <a href="add-bus.html">Add Bus</a>
+              <div class="nested-dropdown-content">
+                <a href="delete-bus.html">Delete Bus</a>
+              </div>
+            </div>
+            <div class="nested-dropdown">
+              <a href="add-driver.html">Add Driver</a>
+              <div class="nested-dropdown-content">
+                <a href="update-driver.html">Update Driver</a>
+                <a href="delete-driver.html">Delete Driver</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="attendance.html">
+          <button class="attendance-button">
+            Attendance
+          </button>
+        </a>
+        <a href="request.html">
+          <button class="attendance-button">
+              Rerouting
+          </button>
+        </a>
+      </div>      
+    
+    </div>
+
+    
+    <div id="map"></div>
+      
+    </div> 
+    
+    <div class="edit-container">
+      <div class="search-routes">
+        <select id="route">
+          <option value="" disabled selected>Select a bus route</option>
+        </select>
+      </div>
+      <div class="route-data">
+        <div id="route-name-display"></div>
+        <div id="source-name-display"></div>
+        <div id="destination-name-display"></div>
+        <div id="stops-list-display"></div>
+      </div>
+
+      <div class="buttons">
+        <button id="enableButton" class="enable-button" disabled>Enable Route</button>
+        <button id="disableButton" class="disable-button" disabled>Disable Route</button>
+      </div>
+    </div>
+    
+
+  </body>
+</html>

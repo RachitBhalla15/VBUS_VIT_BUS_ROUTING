@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <title>Excel to JSON | Javacodepoint</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>    
+  </head>
+  <body>
+
+    <button id="uploadButton">upload data</button>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+      import { getFirestore, collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
+
+       // Initialize Firebase with your configuration
+       const firebaseConfig = {
+  apiKey: "AIzaSyCGRFOEC7ZZS3ovP7kZm2BOga4l0BeUwJ4",
+  authDomain: "vit-bus-tracking-firebase.firebaseapp.com",
+  projectId: "vit-bus-tracking-firebase",
+  storageBucket: "vit-bus-tracking-firebase.appspot.com",
+  messagingSenderId: "584803144956",
+  appId: "1:584803144956:web:6eba2cb9552e48de333379",
+  measurementId: "G-F0R03J9ZZX"
+};
+
+      initializeApp(firebaseConfig);
+      const db = getFirestore();
+
+      const data= [
+  {
+    "route_name":"vit test2",
+    "busNo": "Bus 1",
+    "driver": "name1",
+    "students": [
+      { "name": "John Doe", "attendance": false },
+      { "name": "Jane Doe", "attendance": true },
+      { "name": "Bob Smith", "attendance": false },
+      { "name": "Alice Johnson", "attendance": true },
+      { "name": "Tom Williams", "attendance": true }
+    ]
+  },
+  {
+    "route_name":"VIt test",
+    "busNo": "Bus 2",
+    "driver": "name2",
+    "students": [
+      { "name": "Mary Doe", "attendance": true },
+      { "name": "Jane Doe", "attendance": false },
+      { "name": "Bob Smith", "attendance": true },
+      { "name": "Alice Johnson", "attendance": false },
+      { "name": "Tom Williams", "attendance": false }
+    ]
+  },
+  {
+    "route_name":"param",
+    "busNo": "Bus 3",
+    "driver": "name3",
+    "students": [
+      { "name": "John Doe", "attendance": false },
+      { "name": "Jane Doe", "attendance": false },
+      { "name": "Bob Smith", "attendance": true },
+      { "name": "Alice Johnson", "attendance": true },
+      { "name": "Tom Williams", "attendance": false }
+    ]
+  },
+  {
+    "route_name":"testing_add_route_final",
+    "busNo": "Bus 4",
+    "driver": "name4",
+    "students": [
+      { "name": "John Doe", "attendance": true },
+      { "name": "Jane Doe", "attendance": true },
+      { "name": "Bob Smith", "attendance": false },
+      { "name": "Alice Johnson", "attendance": false },
+      { "name": "Tom Williams", "attendance": false }
+    ]
+  }
+];
+
+      async function uploadData() {
+        const route1Ref = collection(db, 'attendance_report','details','02 Nov 2023');
+        for (let i = 0; i < data.length; i++) {
+          const bus=data[i];
+          const docRef = doc(route1Ref, String(i+1));
+          await setDoc(docRef, bus);
+        }
+        console.log('Data uploaded successfully!');
+      }
+
+      document.getElementById('uploadButton').addEventListener('click', () => {
+        uploadData();
+      });
+    </script>
+  </body>
+</html>
