@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+    <title>Excel to JSON | Javacodepoint</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.min.js"></script>    
+  </head>
+  <body>
+
+    <button id="uploadButton">upload data</button>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+      import { getFirestore, collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
+
+       // Initialize Firebase with your configuration
+       const firebaseConfig = ({
+      apiKey: "AIzaSyB1zdPdHi6njKUgiukk-84RVPEzOJFcAxc",
+      authDomain: "vit-bus-tracking.firebaseapp.com",
+      databaseURL: "https://vit-bus-tracking-default-rtdb.firebaseio.com",
+      projectId: "vit-bus-tracking",
+      storageBucket: "vit-bus-tracking.appspot.com",
+      messagingSenderId: "832936720267",
+      appId: "1:832936720267:web:4f170bd4652b5ae10d618e",
+      measurementId: "G-5L7PE5VHHX"
+      });
+
+      initializeApp(firebaseConfig);
+      const db = getFirestore();
+
+      const data= [
+    {
+      name: "Bus 1",
+      driver: "name1",
+      Did:"10022617",
+      contact: "1234567890",
+      currLocation: "Stop 2",
+      capacity: 0,
+      stops: [
+        { location: "Kelambakkam", students: 10 },
+        { location: "Stop 2", students: 5 },
+        { location: "Stop 3", students: 15 },
+        { location: "Stop 4", students: 8 },
+        { location: "Stop 5", students: 12 }
+      ]
+    },
+    {
+      name: "Bus 2",
+      driver: "name2",
+      Did:"10022514",
+      contact: "9876543210",
+      currLocation: "Stop 5",
+      capacity: 0,
+      stops: [
+        { location: "Menambakkam", students: 8 },
+        { location: "Stop 2", students: 10 },
+        { location: "Stop 3", students: 6 },
+        { location: "Stop 4", students: 5 },
+        { location: "Stop 5", students: 4 }
+      ]
+    },
+    {
+      name: "Bus 3",
+      driver: "name3",
+      Did:"10022069",
+      contact: "5555555555",
+      currLocation: "Kancheepuram",
+      capacity: 0,
+      stops: [
+        { location: "Kancheepuram", students: 15 },
+        { location: "Stop 2", students: 8 },
+        { location: "Stop 3", students: 2 },
+        { location: "Stop 4", students: 3 },
+        { location: "Stop 5", students: 1 }
+      ]
+    },
+    {
+      name: "Bus 4",
+      driver: "name4",
+      Did:"10022345",
+      contact: "1234567899",
+      currLocation: "Vandalur",
+      capacity: 0,
+      stops: [
+        { location: "Stop 1", students: 15 },
+        { location: "Stop 2", students: 8 },
+        { location: "Stop 3", students: 4 },
+        { location: "Vandalur", students: 10 },
+        { location: "Stop 5", students: 1 }
+      ]
+    },
+    {
+      name: "Bus 5",
+      driver: "name5",
+      Did:"10022999",
+      contact: "2323232323",
+      currLocation: "Maraimalai",
+      capacity: 0,
+      stops: [
+        { location: "Stop 1", students: 10 },
+        { location: "Stop 2", students: 12 },
+        { location: "Maraimalai", students: 4},
+        { location: "Stop 4", students: 8 },
+        { location: "Stop 5", students: 5 }
+      ]
+    }
+
+  ];
+
+
+      async function uploadData() {
+        const route1Ref = collection(db, 'bus_driver','driver_det','stops');
+        for (let i = 0; i < data.length; i++) {
+          const bus=data[i];
+          const docRef = doc(route1Ref, String(i+1));
+          await setDoc(docRef, bus);
+        }
+        console.log('Data uploaded successfully!');
+      }
+
+      document.getElementById('uploadButton').addEventListener('click', () => {
+        uploadData();
+      });
+    </script>
+  </body>
+</html>

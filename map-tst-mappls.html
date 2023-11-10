@@ -1,0 +1,50 @@
+  <html>
+    <head>
+      <title>Direction With EventsAlongTheRoute</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Direction With EventsAlongTheRoute">
+  
+          <script src="https://apis.mappls.com/advancedmaps/api/7e228cc42a410abe8c713c359a3191a1/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+          <script src="https://apis.mappls.com/advancedmaps/api/eecfe98c41ac7dad13b645aea8dc389a/map_sdk_plugins?v=3.0"></script>
+          <style>
+          body { margin: 0 ; }
+          #map {width: 100%;height: 100vh; margin: 0; padding: 0; }
+      </style>
+      </head>
+      <body>
+          <div id="map"></div>
+              <script>
+          /*Map Initialization*/
+          var map,direction_option;
+          function initMap1(){
+              map = new mappls.Map('map', {
+                  center: [28.09, 78.3],
+                  zoom: 5,
+              });
+              map.addListener('load',function(){ 
+                  var direction_option = {
+                      map: map,
+                      divWidth:'350px',
+                      start: { label: 'mappls', geoposition: "mmi000" },
+                      end: { label: 'My destination', geoposition: "28.656769,77.203775" },
+                      Resource: 'route_eta',
+                      annotations:"nodes,congestion",
+                      Profile:['driving','biking','trucking','walking'],
+                      routeSummary:{
+                          summarycallback:function(data){
+                              console.log(data);
+                          }
+                      }
+                  }
+                  mappls.direction(direction_option,function(data) {
+                      direction_plugin=data;
+                      console.log(direction_plugin);
+                  });
+              });
+          }
+      </script>
+          </body>
+    </html>
+  
+  
+  

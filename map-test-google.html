@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>mappls Directions</title>
+    <script src="https://apis.mappls.com/advancedmaps/api/7e228cc42a410abe8c713c359a3191a1/map_sdk?layer=vector&v=2.0&callback=initMap" defer async></script>
+    <script>
+        let map;
+        let directions;
+        let liveMarker;
+        let liveLocationInterval;
+
+        function initMap() {
+            map = new mappls.Map('map', {
+                center: [12.840625, 80.153431],
+                zoomControl: true,
+                location: true,
+                disableDoubleClickZoom: true
+            });
+            map.setZoom(13);
+
+            directions = new mappls.directions.Directions();
+
+            // Add a marker for live location
+            liveMarker = new mappls.Marker({
+                icon: 'https://maps.mappls.com/images/2.png',
+                iconSize: [30, 30],
+                draggable: false
+            });
+        }
+
+        function calculateRoute() {
+            const start = document.getElementById('start').value;
+            const end = document.getElementById('end').value;
+
+            directions.route({
+                locations: [start, end],
+                success: function (data) {
+                    const route = data.routes[0];
+                    const eta = route.legs[0].duration.text;
+                    document.getElementById('eta').textContent = 'ETA: ' + eta;
+
+                    map.fitBounds(route.bounds);
+                    directions.drawRoute(map, data.routes[0]);
+                },
+                error: function (response) {
+                    window.alert('Directions request failed.');
+                }
+            });
+        }
+
+        function startLiveLocation() {
+            // Simulated live location updates (Replace with actual live data)
+            let lat = 0;
+            let lng = 0;
+            liveLocationInterval = setInterval(function () {
+                lat += 0.001;
+                lng += 0.001;
+                const newLocation = [lat, lng];
+                liveMarker.setLatLng(newLocation).addTo(map);
+            }, 1000); // Update every 1 second (replace with actual live data)
+        }
+
+        function stopLiveLocation() {
+            clearInterval(liveLocationInterval);
+            liveMarker.removeFrom(map);
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <label for="start">Start:</label>
+        <input type="text" id="start" name="start">
+        <label for="end">End:</label>
+        <input type="text" id="end" name="end">
+        <button onclick="calculateRoute()">Calculate Route</button>
+        <button onclick="startLiveLocation()">Start Live Location</button>
+        <button onclick="stopLiveLocation()">Stop Live Location</button>
+        <div id="eta"></div>
+    </div>
+    <div id="map" style="width: 100%; height: 500px;"></div>
+</body>
+</html>

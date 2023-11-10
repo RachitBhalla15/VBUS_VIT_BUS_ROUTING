@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MAP</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        html,
+        body,
+        #map {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+    <script src="https://apis.mappls.com/advancedmaps/api/7e228cc42a410abe8c713c359a3191a1/map_sdk?layer=vector&v=3.0&callback=initMap1" defer async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    var map;
+
+    function initMap1() {
+        map = new mappls.Map('map', {
+            center: [12.840625, 80.153431],
+            zoomControl: true,
+            location: true,
+        });
+        map.setZoom(15);
+
+        var cD=['coordinates1.xlsx','coordinates2.xlsx','coordinates3.xlsx']
+
+        for(let i=1;i<cD.length;i++){
+            // Load coordinates from Excel sheet
+            loadCoordinatesFromExcel(`coordinates${i}.xlsx`, function(coordinates) {
+                var routeCoordinates = coordinates.map(function(coord) {
+                    return { lat: coord.lat, lng: coord.lng };
+                });
+
+                var routePolyline = new mappls.Polyline({
+                    map: map,
+                    path: routeCoordinates,
+                    strokeColor: `#FF${i}00${i}`,
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+            });
+        }
+    }
+
+
+    function loadCoordinatesFromExcel(file, callback) {
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Configure the request to fetch the Excel file
+        xhr.open('GET', file, true);
+
+        // Set the response type to 'arraybuffer'
+        xhr.responseType = 'arraybuffer';
+
+        // Define what should happen when the request is complete
+        xhr.onload = function() {
+            // Convert the response data into a Uint8Array
+            var data = new Uint8Array(xhr.response);
+
+            // Parse the Excel workbook from the Uint8Array
+            var workbook = XLSX.read(data, { type: 'array' });
+
+            // Get the name of the first sheet in the workbook
+            var sheetName = workbook.SheetNames[0];
+
+            // Get the data from the first sheet
+            var sheet = workbook.Sheets[sheetName];
+
+            // Initialize an array to store the coordinates
+            var coordinates = [];
+
+            // Convert the sheet data to JSON and extract coordinates
+            XLSX.utils.sheet_to_json(sheet).forEach(function(row) {
+                coordinates.push({ lat: parseFloat(row.lat), lng: parseFloat(row.lng) });
+            });
+
+            // Invoke the provided callback with the extracted coordinates
+            if (callback && typeof callback === 'function') {
+                callback(coordinates);
+            }
+        };
+
+        // Send the XMLHttpRequest to fetch the file
+        xhr.send();
+    }
+</script>
+</body>
+</html>

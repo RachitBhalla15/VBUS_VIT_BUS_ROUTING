@@ -1,0 +1,30 @@
+.delete-route{
+  margin-top: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border: 1px solid black;
+  border-radius: 4px;
+  text-align: center;
+  margin: 4px;
+}
+
+.delete-button{
+  margin-top: 20px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid red;
+  font-size: 17px;
+  color: red;
+  margin: 4px;
+}
+
+.add-route-button{
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid #1f5c80;
+  font-size: 25px;
+  color: #1f5c80;
+  margin: 4px;
+}

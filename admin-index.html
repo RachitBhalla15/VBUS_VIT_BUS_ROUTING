@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+
+    <link rel="stylesheet" href="web-styles/index.css">
+
+    <link rel="stylesheet" href="web-styles/details.css">
+
+    <script src="https://apis.mappls.com/advancedmaps/api/7e228cc42a410abe8c713c359a3191a1/map_sdk?layer=vector&v=3.0&callback=initMap1" defer async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    
+  </head>
+  <body>
+    <script src="scripts/dropdown.js"></script>
+    <img class="background" src="images/bg.png">
+
+    <div class="top-bar">
+      <img class="logo" src="images/vit-logo.png">
+      <div class="profile-tab">
+        <div class="profile-container">
+          <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img">
+          <a href="login.html">
+            <div class="sign-out">Signout</div>
+          </a>
+        </div>
+
+        <div class="profile">
+          <div class="id">Admin1</div>
+          <div>VIT Admin</div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="features">
+        <a href="index.html">
+          <button class="home-button">Home</button>
+        </a>
+
+        <div class="edit-dropdown">
+          <button class="edit-route-button">Edit Routes</button>
+          <div class="edit-dropdown-content">
+            <a href="add-route.html" >Add Route</a>
+            <a href="delete-route.html" >Delete Route</a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="dropdown">
+        <input type="text" placeholder="Search for Buses" class="my-input" onclick="toggle()" onkeyup="filterFunction()" id="search-input">
+        <div class="dropdown-content">
+          <a href="admin-index.html" > Show All </a>
+          <a href="#bus" onclick="selectBus(1);">Bus 1</a>
+          <a href="#bus" onclick="selectBus(2)">Bus 2</a>
+          <a href="#bus" onclick="selectBus(3)">Bus 3</a>
+          <a href="#bus" onclick="selectBus(4)">Bus 4</a>
+          <a href="#bus" onclick="selectBus(5)">Bus 5</a>
+        </div>
+      </div>
+    </div>
+
+    
+    <div id="map"></div>
+      <script src="scripts/index.js"></script>
+    </div> 
+
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<html>
+<head>
+    <title>MAP</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        html,
+        body,
+        #map {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+    <script src="https://apis.mappls.com/advancedmaps/api/7e228cc42a410abe8c713c359a3191a1/map_sdk?layer=vector&v=3.0&callback=initMap1" defer async></script>
+</head>
+<body>
+<div id="map"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyB1zdPdHi6njKUgiukk-84RVPEzOJFcAxc",
+    authDomain: "vit-bus-tracking.firebaseapp.com",
+    databaseURL: "https://vit-bus-tracking-default-rtdb.firebaseio.com",
+    projectId: "vit-bus-tracking",
+    storageBucket: "vit-bus-tracking.appspot.com",
+    messagingSenderId: "832936720267",
+    appId: "1:832936720267:web:4f170bd4652b5ae10d618e",
+    measurementId: "G-5L7PE5VHHX",
+  };
+  
+  
+  class LocationData {
+    constructor(latitude, longitude, serial) {
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.serial = serial;
+    }
+  }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function fetchData() {
+        const routes = ["route1", "route2", "route3"];
+        for (const route of routes) {
+          const querySnapshot = await getDocs(collection(db, "bus_web", "routes", route));
+
+          let location_array = [];
+
+          querySnapshot.forEach((doc) => {
+              location_array.push(
+                  new LocationData(
+                      doc.data().lat,
+                      doc.data().lng,
+                      doc.data().serial
+                  )
+              );
+          });
+
+          location_array.sort(function (a, b) {
+              if (a.serial < b.serial) return -1;
+              else return 1;
+          });
+          console.log(location_array);
+          return location_array;
+      }
+  }
+    fetchData().then((location_array) => {
+        initializeMap(location_array);
+    });
+
+    var map, Marker1, Marker2, Marker3, Marker4, markers = [];
+
+    // Modify the initializeMap function to filter out invalid location data
+    function initializeMap(location_array) {
+    const map = new mappls.Map(document.getElementById("map"), {
+        center: { lat: 12.9716, lng: 77.5946 },
+        zoom: 12,
+    });
+
+    const markers = location_array.map((location) => {
+        return new mappls.Marker({
+            position: { lat: location.latitude, lng: location.longitude },
+            map: map,
+        });
+    });
+}
+
+
+    
+
+</script>
+
+
+</body>
+</html>

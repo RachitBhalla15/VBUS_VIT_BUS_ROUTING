@@ -1,0 +1,71 @@
+<html>
+    <head>
+      <title>add-route</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Direction With EventsAlongTheRoute">
+  
+      <script src="https://apis.mappls.com/advancedmaps/api/eecfe98c41ac7dad13b645aea8dc389a/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+          
+      <link rel="stylesheet" href="web-styles/index.css">
+
+      <link rel="stylesheet" href="web-styles/edit-route.css">
+
+      </head>
+
+      <body>
+        <img class="background" src="images/bg.png">
+
+        <div class="top-bar">
+          <img class="logo" src="images/vit-logo.png">
+          <div class="profile-tab">
+            <div class="profile-container">
+              <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img">
+              <a href="login.html">
+                <div class="sign-out">Signout</div>
+              </a>
+            </div>
+    
+            <div class="profile">
+              <div class="id">Admin1</div>
+              <div>VIT Admin</div>
+            </div>
+            
+          </div>
+        </div>
+    
+        <div class="nav-bar">
+          <div class="features">
+            <a href="admin-index.html">
+              <button class="home-button">Home</button>
+            </a>
+    
+            <div class="edit-dropdown">
+              <button class="edit-route-button">Edit Routes</button>
+              <div class="edit-dropdown-content">
+                <a href="add-route.html" >Add Route</a>
+                <a href="delete-route.html" >Delete Route</a>
+              </div>
+            </div>
+          </div>
+    
+    
+          <div class="dropdown">
+            <input type="text" placeholder="Search for Buses" class="my-input" onclick="toggle()" onkeyup="filterFunction()" id="search-input">
+            
+          </div>
+        </div>
+    
+        <div class="info">
+          <label for="bus-number-input">Bus Number:</label>
+          <input type="text" id="bus-number-input" placeholder="Enter Bus Number">
+          <button id="add-route-button">Add Route</button>
+      </div>
+
+      
+        <div id="map">
+          <script src="scripts/add-route.js"></script>
+          <script src="scripts/delete-route.js"></script>
+        </div>
+        </body>
+    </html>
