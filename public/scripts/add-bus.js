@@ -103,7 +103,22 @@ routeDropdown.addEventListener('click', function (event) {
   }
 });
 
+const routeInput = document.getElementById('route-input');
 const addButton = document.querySelector('.submit'); // Assuming you have a button with the class "submit"
+const onHoldSelect = document.getElementById('onHold');
+onHoldSelect.addEventListener('change', function () {
+  const isOnHold = this.value === "true";
+  routeInput.disabled = isOnHold;
+  const Roptions = document.getElementById('route-dropdown');
+    if (isOnHold) {
+        Roptions.style.display = 'none';
+    } else {
+        Roptions.style.display = ''; // Show the route-option when isOnHold is false
+    }
+  routeInput.value = isOnHold ? "" : "";
+
+});
+
 
 addButton.addEventListener('click', async function () {
   // Get the values from the input fields
@@ -111,17 +126,33 @@ addButton.addEventListener('click', async function () {
   const busNumber = document.getElementById('bus-number').value;
   const busCapacity = parseInt(document.getElementById('bus-capacity').value, 10); // Parse as an integer
   const routeInput = document.getElementById('route-input').value;
+  const onHoldValue = onHoldSelect.value;
 
   // Check if any of the input fields are empty
-  if (!busChassisNumber || !busNumber || isNaN(busCapacity) || busCapacity <= 0 || !routeInput) {
-    alert('Please fill in all the required fields with valid data.');
-    return; // Exit the function if any field is empty or invalid
+  if (onHoldValue === false){
+    if (!busChassisNumber || !busNumber || isNaN(busCapacity) || busCapacity <= 0 || !routeInput) {
+      alert('Please fill in all the required fields with valid data.');
+      return; // Exit the function if any field is empty or invalid
+    }
+  
+    if (busChassisNumber.length !== 17 || busNumber.length !== 10) {
+      alert('Please make sure the Bus Chassis Number is 17 characters and Bus Number is 10 characters.');
+      return; // Exit the function if character limits are not met
+    }
   }
 
-  if (busChassisNumber.length !== 17 || busNumber.length !== 10) {
-    alert('Please make sure the Bus Chassis Number is 17 characters and Bus Number is 10 characters.');
-    return; // Exit the function if character limits are not met
+  else if (onHoldValue === true){
+    if (!busChassisNumber || !busNumber || isNaN(busCapacity) || busCapacity <= 0) {
+      alert('Please fill in all the required fields with valid data.');
+      return; // Exit the function if any field is empty or invalid
+    }
+  
+    if (busChassisNumber.length !== 17 || busNumber.length !== 10) {
+      alert('Please make sure the Bus Chassis Number is 17 characters and Bus Number is 10 characters.');
+      return; // Exit the function if character limits are not met
+    }
   }
+  
 
   // Fetch the selected route name from Firestore
   const routeNamesDocRef = doc(db, 'route_names', 'route_names');
@@ -141,22 +172,22 @@ addButton.addEventListener('click', async function () {
       }
     }
 
-    if (!routeSelected) {
-      console.error('Selected route name not found in the "route_names" document.');
+    if (onHoldValue === false && !routeSelected) {
+      alert('Selected route name not found in the "route_names" document.');
       return;
     }
-  } else {
-    console.error('The "route_names" document does not exist.');
-    return;
-  }
+    } else {
+      alert('The "route_names" document does not exist.');
+      return;
+    }
 
-  if (routeSelected) {
     // Create an object with the collected data
     const busData = {
       bus_chassis_number: busChassisNumber,
       bus_number: busNumber,
       max_capacity: busCapacity,
-      route_id: routeSelected,
+      route_id: onHoldValue === "true" ? null : routeSelected,
+      on_hold: onHoldValue,
     };
 
     // Add the busData to Firestore
@@ -177,10 +208,7 @@ addButton.addEventListener('click', async function () {
       window.location.href="add-bus.html"
       successMessage.style.display = 'none';
     }, 1500);
-  } else {
-    console.error('Please select a route before adding the bus.');
-  }
-});
+  });
 
 // MADE BY:-
 // NATANYA MODI :: https://github.com/natanyamodi

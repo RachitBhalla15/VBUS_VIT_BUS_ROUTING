@@ -3,21 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance</title>
-
-        <!-- Include Firebase from a CDN
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script> -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <title>Home</title>
     <link rel="stylesheet" href="web-styles/index.css">
-
-    <link rel="stylesheet" href="web-styles/attendance.css">
+    <link rel="stylesheet" href="web-styles/add-bus.css">
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script  type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
+    <script type="module" src="scripts/update-bus.js"></script>
     
     <script type="module" src="scripts/auth-check.js"></script>
+    
   </head>
   <body>
-
     <img class="background" src="images/bg.png">
 
     <div class="top-bar">
@@ -86,30 +82,45 @@
           </button>
         </a>
       </div>      
-      <div class="dropdown">
-        <input type="text" placeholder="Search for Buses" class="my-input" id="search-input">
-        <div class="dropdown-content" id="route-dropdown"></div>
-      </div>       
+    
     </div>
-      
-      <script src="scripts/dropdown.js"></script>
-      <div class="att-info">
-        <table>
-          <thead>
-            <tr>
-              <th>Route Name</th>
-              <th>Bus No.</th>
-              <th>Student Id</th>
-              <th>Attendance Status</th>
-            </tr>
-          </thead>
-          <tbody id="attendanceTableBody"></tbody>
-        </table>
-        <button class="download" >Download</button> 
-        <script type="module" src="scripts/attendance.js"></script>
-        <div class="calendar">
-          <script type="module" src="scripts/calendar.js"></script>
-        </div>
+
+    
+    <div id="add-container">
+      <div class="bus-number-dropdown">
+        <input type="text" placeholder="Choose a Bus Number" class="bus-number-input" id="bus-data-input" enabled>
+        <div class="bus-number-dropdown-content" id="bus-number-dropdown"></div>
       </div>
+      
+      <div class="bus_input">
+        <input type="text" id="bus-chassis-number" maxlength="17" required placeholder="Bus Chassis Number">
+      <span id="bus-chassis-number-counter" style="display: inline-block; margin-left: 96%;">0/17</span>
+      </div>
+  
+      
+      
+
+      <div class="bus_input">
+        <input type="number" id="bus-capacity" max="99" required placeholder="Bus Capacity">
+        <span id="bus-capacity-counter" style="display: inline-block; margin-left: 96%;">0/2</span>
+      </div>
+
+      <div class="onHold-input">
+        <label for="onHold">On Hold:</label>
+        <select id="onHold" name="onHold">
+          <option value="false" selected>False</option>
+          <option value="true">True</option>
+        </select>
+      </div>
+
+      <div class="route-dropdown">
+        <input type="text" placeholder="Search for Routes" class="route-input" id="route-input" enabled>
+        <div class="route-dropdown-content" id="route-dropdown"></div>
+      </div>
+  
+  
+      <button class="submit" type="submit">Update Bus</button>
+  </div>
+  
   </body>
 </html>

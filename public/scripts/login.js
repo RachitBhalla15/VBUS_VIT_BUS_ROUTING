@@ -21,39 +21,44 @@ const loginButton = document.querySelector('.login-button');
 
 loginButton.addEventListener('click', () => {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then(async (result) => {
-      const user = result.user;
-      console.log(`Logged in as: ${user.displayName}`);
+
+signInWithPopup(auth, provider)
+  .then(async (result) => {
+    const user = result.user;
+    console.log(`Logged in as: ${user.displayName}`);
+    const displayName = user.displayName || 'ADMIN';
+    localStorage.setItem('user', user);
+    localStorage.setItem('username', displayName);
+    
+    // Fetch the user's document from Firestore
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const accessLevel = userDocSnap.data().access_level;
+
+      // Check the authentication provider
       
-      // Fetch the user's document from Firestore
-      const userDocRef = doc(db, "users", user.uid);
-      const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) {
-        // Get the user's access level from Firestore
-        const accessLevel = userDocSnap.data().access_level;
-
-        if (accessLevel === "AccessLevel.admin") {
-          // Redirect to the admin page
-          window.location.href = 'admin-index.html'; // Replace with your admin page URL.
-        } else if(accessLevel === "AccessLevel.coordinator") {
-          // Redirect to the index (home) page
-          window.location.href = 'coord-index.html'; // Replace with your index (home) page URL.
-        }
-        else{
-          alert(`Login Denied.User has an access level: ${accessLevel}`);
-        }
+      // ... rest of your code
+      if (accessLevel === "AccessLevel.admin") {
+        window.location.href = 'admin-index.html';
+      } else if (accessLevel === "AccessLevel.coordinator") {
+        window.location.href = 'coord-index.html';
       } else {
-        // User document not found, handle as needed
-        console.error("User document not found.");
+        alert(`Login Denied. User has an access level: ${accessLevel}`);
       }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
+    } else {
+      // User document not found, handle as needed
+      console.error("User document not found.");
+    }
+    
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
+});
 
 
 function togglePassword() {
@@ -95,6 +100,9 @@ async function signIn() {
   const storedPassword = await fetchUserCredentials(username);
 
   if (storedPassword !== null && storedPassword === password) {
+    // Set a flag in local storage to indicate custom login
+    localStorage.setItem('customLogin', 'true');
+
     // Check if the username contains "ADMIN" and redirect accordingly
     if (username.includes("ADMIN")) {
       window.location.href = 'admin-index.html'; // Redirect to admin page
@@ -105,6 +113,7 @@ async function signIn() {
     alert("Invalid username or password");
   }
 }
+
 
 
     // Select the button by its class name "submit-button"

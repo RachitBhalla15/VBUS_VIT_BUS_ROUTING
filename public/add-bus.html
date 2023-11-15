@@ -10,7 +10,7 @@
     <script  type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
     <script type="module" src="scripts/add-bus.js"></script>
     
-
+    <script type="module" src="scripts/auth-check.js"></script>
     
   </head>
   <body>
@@ -18,17 +18,19 @@
 
     <div class="top-bar">
       <img class="logo" src="images/vit-logo.png">
+
       <div class="profile-tab">
+        
         <div class="profile-container">
           <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img">
-          <a href="login.html">
-            <div class="sign-out">Signout</div>
-          </a>
+          <div class="sign-out" id="signOut">Signout</div>
+          <script type="module" src="scripts/signout.js"></script> 
         </div>
 
         <div class="profile">
-          <div class="id">ADMIN</div>
+          <div class="id"></div>
           <div>VIT Admin</div>
+          <script src="scripts/username.js"></script>
         </div>
         
       </div>
@@ -103,8 +105,16 @@
         <span id="bus-capacity-counter" style="display: inline-block; margin-left: 96%;">0/2</span>
       </div>
 
+      <div class="onHold-input">
+        <label for="onHold">On Hold:</label>
+        <select id="onHold" name="onHold">
+          <option value="false" selected>False</option>
+          <option value="true">True</option>
+        </select>
+      </div>
+
       <div class="route-dropdown">
-        <input type="text" placeholder="Search for Routes" class="route-input" id="route-input">
+        <input type="text" placeholder="Search for Routes" class="route-input" id="route-input" enabled>
         <div class="route-dropdown-content" id="route-dropdown"></div>
       </div>
   

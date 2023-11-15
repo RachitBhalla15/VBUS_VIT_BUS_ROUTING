@@ -3,16 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance</title>
-
-        <!-- Include Firebase from a CDN
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script> -->
-
+    <title>Show Drivers</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="web-styles/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-    <link rel="stylesheet" href="web-styles/attendance.css">
+    <link rel="stylesheet" href="web-styles/show-routes.css">
     
     <script type="module" src="scripts/auth-check.js"></script>
   </head>
@@ -86,30 +82,22 @@
           </button>
         </a>
       </div>      
-      <div class="dropdown">
-        <input type="text" placeholder="Search for Buses" class="my-input" id="search-input">
-        <div class="dropdown-content" id="route-dropdown"></div>
-      </div>       
     </div>
-      
-      <script src="scripts/dropdown.js"></script>
-      <div class="att-info">
+ 
+      <div class="rou-info">
         <table>
           <thead>
-            <tr>
-              <th>Route Name</th>
-              <th>Bus No.</th>
-              <th>Student Id</th>
-              <th>Attendance Status</th>
+            <tr class="">
+              <th>Driver Name</th>
+              <th>View</th>
+              <th>Modify</th>
+              <th>Delete</th>
             </tr>
           </thead>
-          <tbody id="attendanceTableBody"></tbody>
+          
+          <tbody id="routesTableBody"></tbody>
         </table>
-        <button class="download" >Download</button> 
-        <script type="module" src="scripts/attendance.js"></script>
-        <div class="calendar">
-          <script type="module" src="scripts/calendar.js"></script>
-        </div>
+        <script type="module" src="scripts/show-drivers.js"></script>
       </div>
   </body>
 </html>
