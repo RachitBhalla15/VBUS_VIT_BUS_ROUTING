@@ -13,11 +13,11 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
-const routesCollection = collection(db, 'driver_data');
+const driverCollection = collection(db, 'driver_data');
 
-async function displayRoutes() {
+async function displayDrivers() {
   try {
-    const querySnapshot = await getDocs(routesCollection);
+    const querySnapshot = await getDocs(driverCollection);
 
     querySnapshot.forEach((docSnapshot) => {
       const driver = docSnapshot.data();
@@ -26,7 +26,7 @@ async function displayRoutes() {
       const row = document.createElement('tr');
       row.innerHTML = `
       <td>${Name}</td>
-      <td><a href="#"><i class="fas fa-eye"></i></a></td>
+      <td><a href="view-driver.html"><i class="fas fa-eye"></i></a></td>
       <td><a href="update-driver.html"><i class="fas fa-edit"></i></a></td>
       <td><a href="delete-driver.html"><i class="fas fa-trash-alt"></i></a></td>
     `;
@@ -42,4 +42,4 @@ async function displayRoutes() {
 }
 
 // Call the function to display routes
-displayRoutes();
+displayDrivers();

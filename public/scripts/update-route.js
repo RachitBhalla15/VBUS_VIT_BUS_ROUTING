@@ -249,27 +249,36 @@ async function getSelectedBoardingPointData(elementId) {
 }
 
 // Event listener for the "Add Boarding Points" button
+// Event listener for the "Add Boarding Points" button
 document.getElementById('add-boarding').addEventListener('click', async function () {
   const selectedBoardingData = await getSelectedStopData('boarding');
-  const StartstopId=await getSelectedStopData('start');
-  const StopstopId=await getSelectedStopData('end');
+  const StartstopId = await getSelectedStopData('start');
+  const StopstopId = await getSelectedStopData('end');
   console.log("haha");
   console.log(selectedBoardingPoints);
 
   if (selectedBoardingData) {
-    // Add the selected boarding point to the array
-    selectedBoardingPoints.push(selectedBoardingData);
-    selectedBoardingPointNames.push(selectedBoardingData.name); // Store the stop name
+    // Check if the selected boarding point is not already in the list
+    const isAlreadyAdded = selectedBoardingPoints.some(point => point.stop_id === selectedBoardingData.stop_id);
 
+    if (!isAlreadyAdded) {
+      // Add the selected boarding point to the array
+      selectedBoardingPoints.push(selectedBoardingData);
+      selectedBoardingPointNames.push(selectedBoardingData.name); // Store the stop name
+
+      updateBoardingPointList();
+      addBoardingMarkers();
+      // updatePolyline();
+    } else {
+      alert('Boarding point is already in the list.');
+    }
+  } else {
     updateBoardingPointList();
     addBoardingMarkers();
-    // updatePolyline();
   }
-  else{
-    updateBoardingPointList();
-    addBoardingMarkers();
-  }
+  document.getElementById('boarding').value = "";
 });
+
 
 // Function to add markers for selected boarding points
 function addBoardingMarkers() {
@@ -421,7 +430,7 @@ document.getElementById('calculate-route').addEventListener('click', async funct
     updatePolyline();
   }
 
-  if (!isNaN(start.latitude) && !isNaN(start.longitude) && selectedBoardingData) {
+  if (!isNaN(start.latitude) && !isNaN(start.longitude)) {
     encodedPolyline = await calculateRouteAndGeneratePolyline(start, end, selectedBoardingPoints);
 
     if (encodedPolyline) {
@@ -560,7 +569,7 @@ document.getElementById('update-route').addEventListener('click', async function
     alert('Please select valid source and destination locations.');
     return;
   }
-
+  console.log(encodedPolyline)
   if (!encodedPolyline) {
     alert('Please calculate the route and generate a valid polyline before updating the route.');
     return;

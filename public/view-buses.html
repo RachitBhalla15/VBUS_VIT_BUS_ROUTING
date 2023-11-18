@@ -3,21 +3,23 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance</title>
+    <title>Home</title>
 
-        <!-- Include Firebase from a CDN
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script> -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="web-styles/index.css">
 
-    <link rel="stylesheet" href="web-styles/attendance.css">
+    <link rel="stylesheet" href="web-styles/add-bus.css">
+
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script  type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
     
+    
+    <script type="module" src="scripts/view-bus.js"></script>
+
     <script type="module" src="scripts/auth-check.js"></script>
+
+    
   </head>
   <body>
-
     <img class="background" src="images/bg.png">
 
     <div class="top-bar">
@@ -104,25 +106,20 @@
         <div class="dropdown-content" id="route-dropdown"></div>
       </div>       
     </div>
-      
-      <script src="scripts/dropdown.js"></script>
-      <div class="att-info">
-        <table>
-          <thead>
-            <tr>
-              <th>Route Name</th>
-              <th>Bus No.</th>
-              <th>Student Id</th>
-              <th>Attendance Status</th>
-            </tr>
-          </thead>
-          <tbody id="attendanceTableBody"></tbody>
-        </table>
-        <button class="download" >Download</button> 
-        <script type="module" src="scripts/attendance.js"></script>
-        <div class="calendar">
-          <script type="module" src="scripts/calendar.js"></script>
-        </div>
+
+    <div id="driver-data-container">
+      <div class="emp-dropdown">
+        <input type="text" placeholder="Choose Bus Number" class="emp-input" id="emp-data-input">
+        <div class="emp-dropdown-content" id="emp-dropdown"></div>
       </div>
+
+      
+      <div id="bus-details">
+      </div>
+
+  </div>
+
+
+
   </body>
 </html>

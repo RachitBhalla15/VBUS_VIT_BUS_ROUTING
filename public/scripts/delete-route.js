@@ -65,7 +65,6 @@ searchInput.addEventListener('input', function () {
 let selectedRouteKey = null;
 
 // Event listener for route selection
-// Event listener for route selection
 routeDropdown.addEventListener('click', async function (event) {
   if (event.target && event.target.className === 'route-option') {
     searchInput.value = event.target.textContent;
@@ -111,8 +110,6 @@ routeDropdown.addEventListener('click', async function (event) {
   }
 });
 
-
-// Add event listener for the "Delete Route" button
 // Add event listener for the "Delete Route" button
 const deleteButton = document.getElementById('submit');
 const deleteConfirmation = document.getElementById('deleteConfirmation');
@@ -129,19 +126,19 @@ deleteButton.addEventListener('click', function () {
 });
 
 // Add event listener for the "Yes" button
-confirmDeleteButton.addEventListener('click', async function () {
+confirmDeleteButton.addEventListener("click", async function () {
   // Check if a route is selected
   if (!selectedRouteKey) {
-    console.error('No route is selected.');
+    console.error("No route is selected.");
     return;
   }
 
   // Delete the selected route from the "routes" collection
-  const routeDocRef = doc(db, 'routes', selectedRouteKey);
+  const routeDocRef = doc(db, "routes", selectedRouteKey);
   await deleteDoc(routeDocRef);
 
   // Delete the selected route from the "route_names" collection
-  const routeNamesDocRef = doc(db, 'route_names', 'route_names');
+  const routeNamesDocRef = doc(db, "route_names", "route_names");
   const docSnap = await getDoc(routeNamesDocRef);
   if (docSnap.exists()) {
     const routeData = docSnap.data();
@@ -149,13 +146,51 @@ confirmDeleteButton.addEventListener('click', async function () {
       delete routeData[selectedRouteKey];
       await setDoc(routeNamesDocRef, routeData);
     }
-    successMessage.textContent = 'Route deleted successfully.';
-    successMessage.style.display = 'block';
+
+    // Update bus data in the "bus_data" collection where route_id matches the deleted route
+    const busDataCollectionRef = collection(db, "bus_data");
+    const busesQuery = query(
+      busDataCollectionRef,
+      where("route_id", "==", selectedRouteKey)
+    );
+    const busQuerySnapshot = await getDocs(busesQuery);
+
+    busQuerySnapshot.forEach(async (busDoc) => {
+      const busData = busDoc.data();
+      // Update bus data where route_id matches the deleted route
+      busData.route_id = null;
+      busData.on_hold = true;
+
+      const busDocRef = doc(busDataCollectionRef, busDoc.id);
+      await setDoc(busDocRef, busData);
+    });
+
+    // Update driver data in the "driver_data" collection where route_id matches the deleted route
+    const driverDataCollectionRef = collection(db, "driver_data");
+    const driversQuery = query(
+      driverDataCollectionRef,
+      where("route_id", "==", selectedRouteKey)
+    );
+    const driverQuerySnapshot = await getDocs(driversQuery);
+
+    driverQuerySnapshot.forEach(async (driverDoc) => {
+      const driverData = driverDoc.data();
+      // Update driver data where route_id matches the deleted route
+      driverData.route_id = null;
+      driverData.on_hold = true;
+
+      const driverDocRef = doc(driverDataCollectionRef, driverDoc.id);
+      await setDoc(driverDocRef, driverData);
+    });
+
+    successMessage.textContent = "Route deleted successfully.";
+    successMessage.style.display = "block";
     setTimeout(() => {
-      window.location.href='delete-route.html';
-      }, 2000);
+      window.location.href = "delete-route.html";
+    }, 2000);
+
     // Hide the confirmation popup
-    deleteConfirmation.style.display = 'none';
+    deleteConfirmation.style.display = "none";
   }
 });
 

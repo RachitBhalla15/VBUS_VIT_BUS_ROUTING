@@ -17,46 +17,45 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const loginButton = document.querySelector('.login-button');
-
+const naamofPerson=document.querySelector('.id-box').value
 
 loginButton.addEventListener('click', () => {
   const provider = new GoogleAuthProvider();
 
-signInWithPopup(auth, provider)
-  .then(async (result) => {
-    const user = result.user;
-    console.log(`Logged in as: ${user.displayName}`);
-    const displayName = user.displayName || 'ADMIN';
-    localStorage.setItem('user', user);
-    localStorage.setItem('username', displayName);
-    
-    // Fetch the user's document from Firestore
-    const userDocRef = doc(db, "users", user.uid);
-    const userDocSnap = await getDoc(userDocRef);
-
-    if (userDocSnap.exists()) {
-      const accessLevel = userDocSnap.data().access_level;
-
-      // Check the authentication provider
+  signInWithPopup(auth, provider)
+    .then(async (result) => {
+      const user = result.user;
+      console.log(`Logged in as: ${user.displayName}`);
+      const displayName = user.displayName || naamofPerson;
+      localStorage.setItem('user', user);
+      localStorage.setItem('username', displayName);
       
+      // Fetch the user's document from Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
 
-      // ... rest of your code
-      if (accessLevel === "AccessLevel.admin") {
-        window.location.href = 'admin-index.html';
-      } else if (accessLevel === "AccessLevel.coordinator") {
-        window.location.href = 'coord-index.html';
+      if (userDocSnap.exists()) {
+        const accessLevel = userDocSnap.data().access_level;
+
+        // Check the authentication provider
+        
+
+        if (accessLevel === "AccessLevel.admin") {
+          window.location.href = 'admin-index.html';
+        } else if (accessLevel === "AccessLevel.coordinator") {
+          window.location.href = 'coord-index.html';
+        } else {
+          alert(`Login Denied. User has an access level: ${accessLevel}`);
+        }
       } else {
-        alert(`Login Denied. User has an access level: ${accessLevel}`);
+        // User document not found, handle as needed
+        console.error("User document not found.");
       }
-    } else {
-      // User document not found, handle as needed
-      console.error("User document not found.");
-    }
-    
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+      
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
 });
 
@@ -103,6 +102,8 @@ async function signIn() {
     // Set a flag in local storage to indicate custom login
     localStorage.setItem('customLogin', 'true');
 
+    const displayName =username;
+      localStorage.setItem('username', displayName);
     // Check if the username contains "ADMIN" and redirect accordingly
     if (username.includes("ADMIN")) {
       window.location.href = 'admin-index.html'; // Redirect to admin page
