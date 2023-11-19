@@ -46,21 +46,21 @@ const busNumberDropdown = document.getElementById('bus-number-dropdown');
   const busDataDocRef = collection(db, 'bus_data');
   
   // Function to filter and display bus number options based on route_selected ID
-  function filterBusNumbers(routeId) {
-    for (const busNumberOption of allBusNumberOptions) {
-      const routeSelected = busNumberOption.getAttribute('data-route-selected');
+  // function filterBusNumbers(routeId) {
+  //   for (const busNumberOption of allBusNumberOptions) {
+  //     const routeSelected = busNumberOption.getAttribute('data-route-selected');
   
-      if (routeSelected === routeId) {
-        busNumberOption.style.display = 'block';
-      } else {
-        busNumberOption.style.display = 'none';
-      }
-    }
-  }
+  //     if (routeSelected === routeId) {
+  //       busNumberOption.style.display = 'block';
+  //     } else {
+  //       busNumberOption.style.display = 'none';
+  //     }
+  //   }
+  // }
   
   // Initialize an array to store all bus number options
   let allBusNumberOptions = [];
-  
+  let routeSelected;
   // Get all documents in the "bus_data" collection
   getDocs(busDataDocRef)
     .then((querySnapshot) => {
@@ -70,7 +70,8 @@ const busNumberDropdown = document.getElementById('bus-number-dropdown');
       querySnapshot.forEach((doc) => {
         // Access the bus_number and route_selected fields from each document
         const busNumber = doc.data().bus_number;
-        const routeSelected = doc.data().route_id;
+        routeSelected = doc.data().route_id;
+        console.log(routeSelected)
         
   
         // Create a div element for each bus number with the 'bus-number-option' class
@@ -157,6 +158,12 @@ busNumberDropdown.addEventListener('click', async function (event) {
         const isOnHold = onHoldValue === "true";
         routeInput.disabled = isOnHold;
         routeInput.value = isOnHold ? "" : routeNameMapping[selectedBusData.route_id]; // Set routeInput to routeId if not on hold
+        const Roptions = document.getElementById('route-dropdown');
+    if (isOnHold) {
+        Roptions.style.display = 'none';
+    } else {
+        Roptions.style.display = ''; // Show the route-option when isOnHold is false
+    }
 
       } else {
         alert('Bus data not found for the selected bus number.');
@@ -222,9 +229,17 @@ routeDropdown.addEventListener('click', function (event) {
     // Set the input value to the selected route option's text
     searchInput.value = event.target.textContent;
     selectedRouteName = event.target.textContent;
-    // Hide the dropdown (you may want to add code for this)
+
+    // Find the corresponding route ID for the selected route name
+    for (const key in routeNameMapping) {
+      if (routeNameMapping[key] === selectedRouteName) {
+        routeSelected = key; // Assign the corresponding route ID to routeSelected
+        break; // Exit the loop once a match is found
+      }
+    }
   }
 });
+
 
 const routeInput = document.getElementById('route-input');
 const addButton = document.querySelector('.submit'); // Assuming you have a button with the class "submit"
@@ -306,7 +321,7 @@ addButton.addEventListener('click', async function () {
       alert('Bus data updated in Firestore successfully:', busData);
       setTimeout(() => {
         // Redirect or perform any other actions after updating
-        window.location.href = "add-bus.html";
+        window.location.href = "update-bus.html";
         successMessage.style.display = 'none';
       }, 1500);
     } else {

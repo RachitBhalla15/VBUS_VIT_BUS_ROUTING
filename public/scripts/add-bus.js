@@ -26,7 +26,7 @@ const busCapacityCounter = document.getElementById('bus-capacity-counter');
 
 busChassisNumberInput.addEventListener('input', function () {
     const currentLength = busChassisNumberInput.value.length;
-    busChassisNumberCounter.textContent = `${currentLength}/17`;
+    busChassisNumberCounter.textContent =` ${currentLength}/17`;
 });
 
 busNumberInput.addEventListener('input', function () {
@@ -41,7 +41,7 @@ busCapacityInput.addEventListener('input', function () {
   }
   
   // Update the counter with the current length (up to 2 digits)
-  busCapacityCounter.textContent = `${busCapacityInput.value.length}/2`;
+  busCapacityCounter.textContent =`${busCapacityInput.value.length}/2`;
 });
 
 

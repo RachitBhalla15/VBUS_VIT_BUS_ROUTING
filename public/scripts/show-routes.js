@@ -22,14 +22,26 @@ async function displayRoutes() {
     querySnapshot.forEach((docSnapshot) => {
       const route = docSnapshot.data();
       const routeName = route.route_name;
+      const enabled=route.enabled;
 
       const row = document.createElement('tr');
-      row.innerHTML = `
+      if(enabled===true){
+        row.innerHTML = `
       <td>${routeName}</td>
-      <td><a href="#"><i class="fas fa-eye"></i></a></td>
+      <td><a href="admin-index.html"><i class="fas fa-eye"></i></a></td>
       <td><a href="update-driver.html"><i class="fas fa-edit"></i></a></td>
       <td><a href="delete-driver.html"><i class="fas fa-trash-alt"></i></a></td>
     `;
+      }
+      else{
+        row.innerHTML = `
+      <td>${routeName}</td>
+      <td><a href="edit-route.html" style="color:red">NOT ENABLED</a></td>
+      <td><a href="update-driver.html"><i class="fas fa-edit"></i></a></td>
+      <td><a href="delete-driver.html"><i class="fas fa-trash-alt"></i></a></td>
+    `;
+      }
+      
       // Assuming you have a table body element with the id 'routesTableBody'
       const routesTableBody = document.getElementById('routesTableBody');
       routesTableBody.appendChild(row);

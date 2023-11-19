@@ -61,6 +61,7 @@
   border-radius: 10px;
   font-size: 20px;
   margin: 0 15px;
+  cursor: pointer;
 }
 
 .enable-button:enabled{

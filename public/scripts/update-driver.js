@@ -14,7 +14,8 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-
+let selectedRouteKey;
+let selectedBusId; // Initialize variable to store bus_id
 const phoneNumberInput = document.getElementById('phoneNumber');
 const phnoCounter = document.getElementById('phno-counter');
 
@@ -134,7 +135,8 @@ empInput.addEventListener('input', function () {
   
             // Display the route name based on the route_id
             document.getElementById('data-input').value = routeNameMapping[routeId] || 'Route Name Not Found';
-  
+            selectedRouteKey = routeId;
+            selectedBusId = matchingDoc.data().bus_id;
             document.getElementById('bus-data-input').value = matchingDoc.data().bus_number;
 
             const onHoldValue = matchingDoc.data().on_hold;
@@ -143,8 +145,20 @@ empInput.addEventListener('input', function () {
             const isOnHold = onHoldValue === "true";
             routeInput.disabled = isOnHold;
             routeInput.value = isOnHold ? "" : routeNameMapping[routeId]; // Set routeInput to routeId if not on hold
+            const Roptions = document.getElementById('route-dropdown');
+    if (isOnHold) {
+        Roptions.style.display = 'none';
+    } else {
+        Roptions.style.display = ''; // Show the route-option when isOnHold is false
+    }
             busNumber.disabled = isOnHold;
             busNumber.value = isOnHold ? "" : matchingDoc.data().bus_number;
+            const Boptions = document.getElementById('bus-number-dropdown');
+    if (isOnHold) {
+        Boptions.style.display = 'none';
+    } else {
+        Boptions.style.display = ''; // Show the route-option when isOnHold is false
+    }
             
   
             // Update other fields as needed (bus number)
@@ -214,7 +228,6 @@ empInput.addEventListener('input', function () {
     }
   });
   // Define a variable to store the selected route's key (ID) from Firestore
-  let selectedRouteKey = null;
   
   // Event listener for route selection
   routeDropdown.addEventListener('click', async function (event) {
@@ -255,7 +268,6 @@ empInput.addEventListener('input', function () {
   function filterBusNumbers(routeId) {
     for (const busNumberOption of allBusNumberOptions) {
       const routeSelected = busNumberOption.getAttribute('data-route-selected');
-  
       if (routeSelected === routeId) {
         busNumberOption.style.display = 'block';
       } else {
@@ -327,7 +339,9 @@ routeDropdown.addEventListener('click', async function (event) {
 
     // Update the input field with the selected route name
     searchInput.value = selectedRouteName;
-
+    document.getElementById('bus-data-input').value = null; 
+    selectedBusId = null;   
+    // busNumber = null;
     // Filter bus numbers based on the selected route key
     filterBusNumbers(selectedRouteKey);
 
@@ -360,20 +374,38 @@ routeDropdown.addEventListener('click', async function (event) {
 // ... (The rest of your code)
 
   
-  let selectedBusNumber = ''
-  // Event listener for bus number selection
-  busNumberDropdown.addEventListener('click', function (event) {
-    if (event.target && event.target.className === 'bus-number-option') {
-      busNumberInput.value = event.target.textContent;
-      selectedBusNumber = event.target.textContent;
-      // Hide the dropdown (you may want to add code for this)
+
+
+// Event listener for bus number selection
+busNumberDropdown.addEventListener('click', async function (event) {
+  if (event.target && event.target.className === 'bus-number-option') {
+    const selectedBusNumber = event.target.textContent;
+
+    // Fetch the bus data based on the selected bus number
+    const busDataQuery = collection(db, 'bus_data');
+    try {
+      const querySnapshot = await getDocs(busDataQuery);
+      querySnapshot.forEach((doc) => {
+        const busNumber = doc.data().bus_number;
+        if (busNumber === selectedBusNumber) {
+          selectedBusId = doc.data().bus_id; // Retrieve bus_id for the selected bus number
+          // Perform any other actions with selectedBusId
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching bus data:', error);
     }
-  });
+
+    busNumberInput.value = selectedBusNumber;
+    // Hide the dropdown (you may want to add code for this)
+  }
+});
+
 
 
 const onHoldSelect = document.getElementById('onHold');
 const routeInput = document.getElementById('data-input');
-const busNumber = document.getElementById('bus-data-input');
+let busNumber = document.getElementById('bus-data-input');
 onHoldSelect.addEventListener('change', function () {
   const isOnHold = this.value === "true";
   routeInput.disabled = isOnHold;
@@ -449,25 +481,33 @@ submitButton.addEventListener('click', async () => {
     const busNumber = busNumberInput.value;
     const onHoldValue = onHoldSelect.value;
     phoneNumber = `+91 ${phoneNumber}`
-    // Update the document with the new values
-    const newData = {
-      employee_name: name,
-      phone_number: phoneNumber,
-      aadhar_number: aadhar,
-      route_id: document.getElementById('onHold') === "true" ? null : selectedRouteKey,
-      bus_number: onHoldValue === "true" ? null : busNumber,
-      on_hold: onHoldValue,
-    };
 
-    try {
-      await setDoc(matchingDoc.ref, newData, { merge: true });
-      successMessage.textContent = 'Document updated successfully.';
-      setTimeout(() => {
-        window.location.href='update-driver.html';
-      }, 2000);
-    } catch (error) {
-      console.error('Error updating document:', error);
+    if (selectedBusId === null && onHoldValue === false){
+      alert('there is no bus assigned to that route')
     }
+    else{
+      const newData = {
+        employee_name: name,
+        phone_number: phoneNumber,
+        aadhar_number: aadhar,
+        route_id: onHoldValue === "true" ? null : selectedRouteKey,
+        bus_number: onHoldValue === "true" ? null : busNumber,
+        on_hold: onHoldValue,
+        bus_id: onHoldValue === "true" ? null : selectedBusId,
+      };
+  
+      try {
+        await setDoc(matchingDoc.ref, newData, { merge: true });
+        successMessage.textContent = 'Document updated successfully.';
+        setTimeout(() => {
+          window.location.href='update-driver.html';
+        }, 2000);
+      } catch (error) {
+        console.error('Error updating document:', error);
+      }
+    }
+    // Update the document with the new values
+    
   } else if (querySnapshot.size === 0) {
     alert('No document found with the selected employee number.');
   } else {

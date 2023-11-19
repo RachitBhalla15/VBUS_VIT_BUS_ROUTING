@@ -15,8 +15,8 @@
     
     <script type="module" src="scripts/add-driver.js"></script>
 
-    
     <script type="module" src="scripts/auth-check.js"></script>
+
     
   </head>
   <body>
@@ -25,10 +25,10 @@
     <div class="top-bar">
       <img class="logo" src="images/vit-logo.png">
       <div class="profile-tab">
-
-
         <div class="profile-container">
-          <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img"> 
+          <img src="images/Black Geometric Depop Profile Picture (1).png" class="profile-img">
+          <div class="sign-out" id="signOut">Signout</div>
+          <script type="module" src="scripts/signout.js"></script> 
         </div>
 
         <div class="profile">
@@ -36,9 +36,6 @@
           <div>VIT Admin</div>
           <script src="scripts/username.js"></script>
         </div>
-
-        <div class="sign-out" id="signOut">Signout</div>
-        <script type="module" src="scripts/signout.js"></script>
         
       </div>
     </div>
@@ -101,10 +98,7 @@
           </button>
         </a>
       </div>      
-      <div class="dropdown">
-        <input type="text" placeholder="Search for Buses" class="my-input" id="search-input">
-        <div class="dropdown-content" id="route-dropdown"></div>
-      </div>       
+
     </div>
 
     <div id="driver-data-container">
