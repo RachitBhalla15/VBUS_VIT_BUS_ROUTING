@@ -129,7 +129,7 @@ addButton.addEventListener('click', async function () {
   const onHoldValue = onHoldSelect.value;
 
   // Check if any of the input fields are empty
-  if (onHoldValue === false){
+  if (onHoldValue === "false"){
     if (!busChassisNumber || !busNumber || isNaN(busCapacity) || busCapacity <= 0 || !routeInput) {
       alert('Please fill in all the required fields with valid data.');
       return; // Exit the function if any field is empty or invalid
@@ -141,7 +141,7 @@ addButton.addEventListener('click', async function () {
     }
   }
 
-  else if (onHoldValue === true){
+  else if (onHoldValue === "true"){
     if (!busChassisNumber || !busNumber || isNaN(busCapacity) || busCapacity <= 0) {
       alert('Please fill in all the required fields with valid data.');
       return; // Exit the function if any field is empty or invalid

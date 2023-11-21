@@ -159,7 +159,7 @@ confirmDeleteButton.addEventListener("click", async function () {
       const busData = busDoc.data();
       // Update bus data where route_id matches the deleted route
       busData.route_id = null;
-      busData.on_hold = true;
+      busData.on_hold = "true";
 
       const busDocRef = doc(busDataCollectionRef, busDoc.id);
       await setDoc(busDocRef, busData);
@@ -177,7 +177,9 @@ confirmDeleteButton.addEventListener("click", async function () {
       const driverData = driverDoc.data();
       // Update driver data where route_id matches the deleted route
       driverData.route_id = null;
-      driverData.on_hold = true;
+      driverData.on_hold = "true";
+      driverData.bus_id=null;
+      driverData.bus_number=null;
 
       const driverDocRef = doc(driverDataCollectionRef, driverDoc.id);
       await setDoc(driverDocRef, driverData);

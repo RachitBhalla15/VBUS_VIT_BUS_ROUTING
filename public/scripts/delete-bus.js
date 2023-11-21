@@ -192,6 +192,25 @@ confirmDeleteButton.addEventListener('click', async function () {
     }
   });
 
+  const driverDataCollectionRef = collection(db, "driver_data");
+    const driversQuery = query(
+      driverDataCollectionRef,
+      where("bus_number", "==", selectedBusNumber)
+    );
+    const driverQuerySnapshot = await getDocs(driversQuery);
+
+    driverQuerySnapshot.forEach(async (driverDoc) => {
+      const driverData = driverDoc.data();
+      // Update driver data where route_id matches the deleted route
+      driverData.route_id = null;
+      driverData.on_hold = "true";
+      driverData.bus_id=null;
+      driverData.bus_number=null;
+
+      const driverDocRef = doc(driverDataCollectionRef, driverDoc.id);
+      await setDoc(driverDocRef, driverData);
+    });
+
   if (busDocumentId) {
     await deleteDoc(doc(db, 'bus_data', busDocumentId));
     successMessage.textContent = 'Bus deleted successfully.';

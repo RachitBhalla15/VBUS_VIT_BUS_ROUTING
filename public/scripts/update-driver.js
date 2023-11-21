@@ -482,7 +482,7 @@ submitButton.addEventListener('click', async () => {
     const onHoldValue = onHoldSelect.value;
     phoneNumber = `+91 ${phoneNumber}`
 
-    if (selectedBusId === null && onHoldValue === false){
+    if (selectedBusId === null && onHoldValue === "false"){
       alert('there is no bus assigned to that route')
     }
     else{

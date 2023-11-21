@@ -45,7 +45,7 @@ function populateLocationDropdowns() {
       });
     })
     .catch(function (error) {
-      console.error('Error fetching locations:', error);
+      alert('Error fetching locations:', error);
     });
 }
 
@@ -69,7 +69,7 @@ function populateBoardingPoints() {
       });
     })
     .catch(function (error) {
-      console.error('Error fetching boarding points:', error);
+      alert('Error fetching boarding points:', error);
     });
 }
 document.getElementById('save-route').addEventListener('click', async function (event) {
@@ -205,7 +205,7 @@ async function calculateRouteAndGeneratePolyline(start, end, boardingPoints) {
         const encodedPath = google.maps.geometry.encoding.encodePath(overviewPath);
         resolve(encodedPath);
       } else {
-        console.error('Directions request failed with status: ' + status);
+        alert('Directions request failed with status: ' + status);
         resolve(null);
       }
     });
@@ -262,11 +262,11 @@ async function getSelectedBoardingPointName(elementId) {
       const stopData = docSnap.data();
       return stopData.name; // Return the name of the stop
     } else {
-      console.error('Selected stop not found in the database.');
+      alert('Selected stop not found in the database.');
       return null;
     }
   } catch (error) {
-    console.error('Error getting selected stop data:', error);
+    alert('Error getting selected stop data:', error);
     return null;
   }
 }
@@ -290,11 +290,11 @@ async function getSelectedBoardingPointData(elementId) {
       return  { latitude: stopData.latitude, longitude: stopData.longitude };
       // Return the name of the stop
     } else {
-      console.error('Selected stop not found in the database.');
+      alert('Selected stop not found in the database.');
       return null;
     }
   } catch (error) {
-    console.error('Error getting selected stop data:', error);
+    alert('Error getting selected stop data:', error);
     return null;
   }
 }
@@ -333,7 +333,7 @@ document.getElementById('calculate-route').addEventListener('click', async funct
 
       existingPolyline = polyline; // Update the existingPolyline with the new polyline
     } else {
-      console.error('Failed to calculate the route.');
+      alert('Failed to calculate the route.');
     }
   }
 });
@@ -387,11 +387,11 @@ function addPlaceMarker(placeData, color) {
         });
         markers.push(marker)
       } else {
-        console.error('Document not found:', placeData);
+        alert('Document not found:', placeData);
       }
     })
     .catch((error) => {
-      console.error('Error fetching document:', error);
+      alert('Error fetching document:', error);
     });
 }
 
@@ -511,17 +511,17 @@ document.getElementById('add-boarding').addEventListener('click', async function
           updateBoardingPointList();
           // updatePolyline(); // Consider updating the polyline if needed
         } else {
-          console.log('Stop is the start or end location.');
+          alert('Boarding Point is same as the start or end location.');
           // Optionally, you might display a message indicating that the stop is the start or end location
         }
       } else {
-        console.error('Selected stop not found in the database.');
+        alert('Selected stop not found in the database.');
       }
     } catch (error) {
-      console.error('Error getting selected stop data:', error);
+      alert('Error getting selected stop data:', error);
     }
   } else {
-    console.log('Start and/or end locations are not defined.');
+    alert('Start and/or end locations are not defined.');
     // Optionally, you might display a message indicating that the start and/or end locations are not defined
   }
 });

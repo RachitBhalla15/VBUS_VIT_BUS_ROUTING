@@ -260,12 +260,12 @@ addButton.addEventListener('click', async function () {
   phoneNumber = `+91 ${phoneNumber}`
 
   // Check if any of the input fields are empty or not completely filled
-  if (onHoldValue === false){
+  if (onHoldValue === "false"){
     if (!empName || !empNumber || !phoneNumber || !routeInput || !busNumber || !aadharNumber) {
       alert('Please fill in all the required fields with valid data.');
       return; // Exit the function if any field is empty or invalid
     }
-  } else if (onHoldValue === true){
+  } else if (onHoldValue === "true"){
     if (!empName || !empNumber || !phoneNumber || !aadharNumber) {
       alert('Please fill in all the required fields with valid data.');
       return; // Exit the function if any field is empty or invalid
@@ -332,7 +332,7 @@ addButton.addEventListener('click', async function () {
     }
 
 
-  if (onHoldValue === false && !routeSelected) {
+  if (onHoldValue === "false" && !routeSelected) {
     alert('Selected route name not found in the "route_names" document.');
     return;
   }
