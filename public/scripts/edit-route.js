@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, doc, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, getDoc, setDoc,query,where } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -126,6 +126,43 @@ disableButton.addEventListener('click', async () => {
     // Update the 'isActive' field in the 'routes' table to false
     const routeDoc = doc(db, 'routes', routeId);
     await setDoc(routeDoc, { enabled: false }, { merge: true });
+
+    const busDataCollectionRef = collection(db, "bus_data");
+    const busesQuery = query(
+      busDataCollectionRef,
+      where("route_id", "==", routeId)
+    );
+    const busQuerySnapshot = await getDocs(busesQuery);
+
+    busQuerySnapshot.forEach(async (busDoc) => {
+      const busData = busDoc.data();
+      // Update bus data where route_id matches the deleted route
+      busData.route_id = null;
+      busData.on_hold = "true";
+
+      const busDocRef = doc(busDataCollectionRef, busDoc.id);
+      await setDoc(busDocRef, busData);
+    });
+
+    // Update driver data in the "driver_data" collection where route_id matches the deleted route
+    const driverDataCollectionRef = collection(db, "driver_data");
+    const driversQuery = query(
+      driverDataCollectionRef,
+      where("route_id", "==", routeId)
+    );
+    const driverQuerySnapshot = await getDocs(driversQuery);
+
+    driverQuerySnapshot.forEach(async (driverDoc) => {
+      const driverData = driverDoc.data();
+      // Update driver data where route_id matches the deleted route
+      driverData.route_id = null;
+      driverData.on_hold = "true";
+      driverData.bus_id=null;
+      driverData.bus_number=null;
+
+      const driverDocRef = doc(driverDataCollectionRef, driverDoc.id);
+      await setDoc(driverDocRef, driverData);
+    });
 
     // Reference the 'route_names' document
     const routesNameDoc = doc(db, 'route_names', 'route_names');
