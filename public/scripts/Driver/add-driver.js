@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, doc, getDocs, getDoc ,addDoc, setDoc,  query, where } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, doc, getDocs, getDoc ,addDoc, setDoc,  query, where } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 import { firebaseConfig } from "../Firebase/config.js";
 
