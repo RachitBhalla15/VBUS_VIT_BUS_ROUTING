@@ -58,7 +58,7 @@ document.getElementById('save-stop').addEventListener('click', async function (e
       });
       map.panTo(marker.getPosition());
       map.setZoom(17);
-      const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${stopLat},${stopLng}&key=AIzaSyB7k7lrR-RLzicM49rpEd0sMfaOmdZ4FDE`;
+      const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${stopLat},${stopLng}&key=AIzaSyBzZugl8OoPpi2id4j975QuGkiJLQH3pmE`;
       const response = await fetch(geocodingUrl);
       const data = await response.json();
 
